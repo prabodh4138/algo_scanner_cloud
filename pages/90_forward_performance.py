@@ -28,7 +28,9 @@ df = load_forward_trades()
 
 if df.empty:
     st.warning("⚠️ No forward trades found yet.")
-    st.stop()
+else:
+    # continue rendering dashboard
+
 
 # ===============================
 # CLOSED TRADES ONLY
