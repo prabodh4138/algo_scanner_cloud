@@ -1,9 +1,18 @@
+import sys
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
 import streamlit as st
 import pandas as pd
+
 from decision_engine.utils.data_cleaner import (
     clean_stock_df,
     clean_index_df,
 )
+
 from utils.supabase_rest_client import supabase_insert
 st.divider()
 st.subheader("📊 Index Daily Data")
