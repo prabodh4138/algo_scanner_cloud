@@ -1,6 +1,10 @@
-# ======================================================
-# INDEX CSV UPLOAD
-# ======================================================
+import streamlit as st
+import pandas as pd
+from decision_engine.utils.data_cleaner import (
+    clean_stock_df,
+    clean_index_df,
+)
+from utils.supabase_rest_client import supabase_insert
 st.divider()
 st.subheader("📊 Index Daily Data")
 
