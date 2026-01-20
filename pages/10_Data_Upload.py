@@ -1,22 +1,3 @@
-# ======================================================
-# VERY FIRST LINES — DO NOT MOVE
-# ======================================================
-import sys
-from pathlib import Path
-
-THIS_FILE = Path(__file__).resolve()
-PROJECT_ROOT = THIS_FILE.parents[1]
-
-# Exact folders that contain the modules
-DATA_CLEANER_DIR = PROJECT_ROOT / "decision_engine" / "utils"
-SUPABASE_UTILS_DIR = PROJECT_ROOT / "utils"
-
-sys.path.insert(0, str(DATA_CLEANER_DIR))
-sys.path.insert(0, str(SUPABASE_UTILS_DIR))
-
-# ======================================================
-# NOW SAFE TO IMPORT ANYTHING ELSE
-# ======================================================
 import streamlit as st
 import pandas as pd
 
