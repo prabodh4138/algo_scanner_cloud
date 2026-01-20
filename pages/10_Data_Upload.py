@@ -1,9 +1,13 @@
 import streamlit as st
 import pandas as pd
+import sys
+from pathlib import Path
 
-from utils.clean_equity_utils import clean_equity_dataframe
-from utils.supabase_rest_client import supabase_insert
-
+# --------------------------------------------------
+# Make project root importable (Streamlit Cloud fix)
+# --------------------------------------------------
+ROOT_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT_DIR))
 
 # ======================================================
 # PAGE CONFIG
