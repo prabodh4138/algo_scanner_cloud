@@ -1,22 +1,21 @@
+# ======================================================
+# VERY FIRST LINES — DO NOT MOVE
+# ======================================================
 import sys
 from pathlib import Path
 
-# ======================================================
-# Explicit filesystem path setup (Streamlit Cloud safe)
-# ======================================================
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+THIS_FILE = Path(__file__).resolve()
+PROJECT_ROOT = THIS_FILE.parents[1]
 
-DECISION_UTILS_PATH = PROJECT_ROOT / "decision_engine" / "utils"
-APP_UTILS_PATH = PROJECT_ROOT / "utils"
+# Exact folders that contain the modules
+DATA_CLEANER_DIR = PROJECT_ROOT / "decision_engine" / "utils"
+SUPABASE_UTILS_DIR = PROJECT_ROOT / "utils"
 
-if str(DECISION_UTILS_PATH) not in sys.path:
-    sys.path.insert(0, str(DECISION_UTILS_PATH))
-
-if str(APP_UTILS_PATH) not in sys.path:
-    sys.path.insert(0, str(APP_UTILS_PATH))
+sys.path.insert(0, str(DATA_CLEANER_DIR))
+sys.path.insert(0, str(SUPABASE_UTILS_DIR))
 
 # ======================================================
-# Imports (now guaranteed to work)
+# NOW SAFE TO IMPORT ANYTHING ELSE
 # ======================================================
 import streamlit as st
 import pandas as pd
@@ -35,7 +34,7 @@ st.caption("Clean → Validate → Append to Supabase")
 
 
 # ======================================================
-# STOCK (EQUITY) CSV UPLOAD
+# STOCK CSV UPLOAD
 # ======================================================
 st.subheader("📈 Stock (Equity) Daily Data")
 
@@ -54,8 +53,8 @@ if stock_file is not None:
         st.error(f"❌ Cleaning failed: {e}")
     else:
         st.success("✅ Stock CSV cleaned successfully")
-        st.info(f"Clean rows ready: {len(clean_df)}")
-        st.info(f"Latest trade_date in upload: {clean_df['trade_date'].max()}")
+        st.info(f"Rows ready: {len(clean_df)}")
+        st.info(f"Latest date: {clean_df['trade_date'].max()}")
 
         st.dataframe(clean_df.head(), use_container_width=True)
 
@@ -64,7 +63,7 @@ if stock_file is not None:
                 "equity_daily_raw",
                 clean_df.to_dict("records")
             )
-            st.success("✅ Stock data uploaded to Supabase")
+            st.success("✅ Stock data uploaded")
 
 
 # ======================================================
@@ -74,8 +73,7 @@ st.divider()
 st.subheader("📊 Index Daily Data")
 
 index_name = st.text_input(
-    "Index Name (example: NIFTY_50, BANKNIFTY)",
-    value=""
+    "Index Name (example: NIFTY_50, BANKNIFTY)"
 )
 
 index_file = st.file_uploader(
@@ -96,8 +94,8 @@ if index_file is not None:
             st.error(f"❌ Cleaning failed: {e}")
         else:
             st.success("✅ Index CSV cleaned successfully")
-            st.info(f"Clean rows ready: {len(clean_df)}")
-            st.info(f"Latest trade_date in upload: {clean_df['trade_date'].max()}")
+            st.info(f"Rows ready: {len(clean_df)}")
+            st.info(f"Latest date: {clean_df['trade_date'].max()}")
 
             st.dataframe(clean_df.head(), use_container_width=True)
 
@@ -106,4 +104,4 @@ if index_file is not None:
                     "index_daily_raw",
                     clean_df.to_dict("records")
                 )
-                st.success("✅ Index data uploaded to Supabase")
+                st.success("✅ Index data uploaded")
