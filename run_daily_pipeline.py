@@ -1,20 +1,16 @@
 import datetime
 import pandas as pd
 
-from decision_engine.pipeline import run_pipeline
-from utils.supabase_rest_client import supabase_insert, supabase_select
+from algo_scanner_cloud.decision_engine.pipeline import run_pipeline
+from algo_scanner_cloud.utils.supabase_rest_client import (
+    supabase_insert,
+    supabase_select,
+)
 
-
-# ==================================================
-# CONFIG
-# ==================================================
 CAPITAL = 1_000_000
 BLOTTER_TABLE = "trade_blotter_daily"
 
 
-# ==================================================
-# GET LAST INSERTED DATE (INCREMENTAL)
-# ==================================================
 def get_last_trade_date():
     rows = supabase_select(
         table=BLOTTER_TABLE,
@@ -27,17 +23,11 @@ def get_last_trade_date():
     return None
 
 
-# ==================================================
-# MAIN ENTRY (RUN BY GITHUB ACTION)
-# ==================================================
 if __name__ == "__main__":
-    print("🚀 Running daily trade pipeline from GitHub Actions")
-
-    last_date = get_last_trade_date()
-    print("Last processed date:", last_date)
+    print("🚀 Running daily trade pipeline")
 
     execution_df = run_pipeline(
-        parquet_path=None,   # next step: Supabase-native input
+        parquet_path=None,
         total_capital=CAPITAL,
     )
 
@@ -45,8 +35,7 @@ if __name__ == "__main__":
         print("⚠️ No trades generated")
         exit(0)
 
-    today = datetime.date.today()
-    execution_df["trade_date"] = today
+    execution_df["trade_date"] = datetime.date.today()
 
     supabase_insert(
         table=BLOTTER_TABLE,
@@ -54,4 +43,4 @@ if __name__ == "__main__":
         on_conflict="trade_date,symbol",
     )
 
-    print(f"✅ Inserted {len(execution_df)} trades into Supabase")
+    print(f"✅ Inserted {len(execution_df)} trades")
