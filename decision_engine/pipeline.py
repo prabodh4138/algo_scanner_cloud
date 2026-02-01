@@ -3,7 +3,8 @@ import pandas as pd
 # ==================================================
 # CORE DATA
 # =================================================
-from utils.timeframe_resampler import build_timeframes
+
+from decision_engine.utils.timeframe_resampler import build_timeframes
 
 
 # ==================================================
