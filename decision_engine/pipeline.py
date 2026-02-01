@@ -2,8 +2,9 @@ import pandas as pd
 
 # ==================================================
 # CORE DATA
-# ==================================================
-from decision_engine.utils.timeframe_resampler import build_timeframes
+# =================================================
+from utils.timeframe_resampler import build_timeframes
+
 
 # ==================================================
 # ZONE ENGINES
