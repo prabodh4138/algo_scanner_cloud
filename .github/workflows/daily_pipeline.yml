@@ -13,38 +13,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # -----------------------------
+      # ---------------------------------
       # 1. CHECKOUT REPOSITORY
-      # -----------------------------
+      # ---------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # -----------------------------
+      # ---------------------------------
       # 2. SETUP PYTHON
-      # -----------------------------
+      # ---------------------------------
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # -----------------------------
+      # ---------------------------------
       # 3. INSTALL DEPENDENCIES
-      # -----------------------------
+      # ---------------------------------
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r algo_scanner_cloud/requirements.txt
 
-      # -----------------------------
-      # 4. RUN DAILY PIPELINE
-      # -----------------------------
+      # ---------------------------------
+      # 4. RUN DAILY PIPELINE (FIXED PATH)
+      # ---------------------------------
       - name: Run daily pipeline
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          PYTHONPATH: ${{ github.workspace }}
+          PYTHONPATH: ${{ github.workspace }}/algo_scanner_cloud
         run: |
           echo "PYTHONPATH=$PYTHONPATH"
           echo "SUPABASE_URL set: ${SUPABASE_URL:+YES}"
           echo "SUPABASE_KEY set: ${SUPABASE_SERVICE_ROLE_KEY:+YES}"
-          python run_daily_pipeline.py
+          python algo_scanner_cloud/run_daily_pipeline.py
