@@ -1,31 +1,50 @@
 name: Daily Trade Pipeline
 
 on:
-  schedule:
-    - cron: "30 13 * * 1-5"   # 7:00 PM IST (Mon–Fri)
+  # Manual trigger (mobile friendly)
   workflow_dispatch:
+
+  # Automatic run: Mon–Fri at 7:00 PM IST
+  schedule:
+    - cron: "30 13 * * 1-5"
 
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout algo_scanner_cloud
+      # -----------------------------
+      # 1. CHECKOUT REPOSITORY
+      # -----------------------------
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # -----------------------------
+      # 2. SETUP PYTHON
+      # -----------------------------
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      # -----------------------------
+      # 3. INSTALL DEPENDENCIES
+      # -----------------------------
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # -----------------------------
+      # 4. RUN DAILY PIPELINE
+      # -----------------------------
       - name: Run daily pipeline
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          PYTHONPATH: ${{ github.workspace }}
         run: |
+          echo "PYTHONPATH=$PYTHONPATH"
+          echo "SUPABASE_URL set: ${SUPABASE_URL:+YES}"
+          echo "SUPABASE_KEY set: ${SUPABASE_SERVICE_ROLE_KEY:+YES}"
           python run_daily_pipeline.py
