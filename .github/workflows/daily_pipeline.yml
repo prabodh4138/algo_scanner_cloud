@@ -27,8 +27,8 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          PYTHONPATH: ${{ github.workspace }}
+          PYTHONPATH: ${{ github.workspace }}/..
         run: |
-          echo "Workspace = $GITHUB_WORKSPACE"
-          echo "PYTHONPATH = $PYTHONPATH"
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+          echo "PYTHONPATH=$PYTHONPATH"
           python run_daily_pipeline.py
